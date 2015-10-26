@@ -2,12 +2,12 @@ import TorrentService from './TorrentService';
 import TorrentRepository from './TorrentRepository';
 
 export default class TorrentController {
-  torrentService: TorrentService;
   torrentRepository: TorrentRepository;
+  torrentService: TorrentService;
 
-  constructor(torrentService: TorrentService, torrentRepository: TorrentRepository) {
-    this.torrentService = torrentService;
+  constructor(torrentRepository: TorrentRepository, torrentService: TorrentService) {
     this.torrentRepository = torrentRepository;
+    this.torrentService = torrentService;
   }
 
   async list(ctx) {
@@ -20,7 +20,6 @@ export default class TorrentController {
         return item;
       });
     } catch (ex) {
-      console.error(ex);
       ctx.throw(ex);
     }
   }
@@ -34,7 +33,8 @@ export default class TorrentController {
     } catch (ex) {
       if (ex.code === '23505') {
         // Unque constraint violation, return 409 - Conflict
-        ctx.throw(409, 'Torrent already exists');
+        ctx.status = 409;
+        ctx.body = { message: 'Torrent already exists' };
       } else {
         ctx.throw(ex);
       }

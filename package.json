@@ -5,7 +5,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
-    "start:watch": "supervisor -w dist/server.js dist/server.js",
+    "start:watch": "supervisor -n -w dist/server.js dist/server.js",
     "build": "webpack",
     "build:watch": "npm run build -- --watch",
     "dev": "concurrent --kill-others 'npm run build:watch -- --colors' 'npm run start:watch'",
@@ -17,12 +17,22 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^2.10.2",
+    "joi": "^6.9.1",
+    "jsonwebtoken": "^5.4.0",
     "kcors": "^1.0.1",
     "koa": "^1.1.0",
+    "koa-body": "^1.3.0",
     "koa-helmet": "^0.3.0",
+    "koa-passport": "^1.2.0",
+    "koa-passport-fw": "0.0.4",
     "koa-router": "^5.2.3",
+    "koa-session": "^3.3.1",
+    "passport": "^0.3.0",
+    "passport-jwt": "^1.2.1",
+    "passport-local": "^1.0.0",
     "pg": "^4.4.3",
     "pg-promise": "^2.2.0",
+    "scrypt": "^5.4.1",
     "source-map-support": "^0.3.2",
     "transmission": "^0.4.3"
   },
@@ -38,6 +48,7 @@
     "eslint-config-airbnb": "^0.1.0",
     "eslint-loader": "^1.1.0",
     "mocha": "^2.3.3",
+    "sardine": "^0.2.10",
     "supervisor": "^0.9.1",
     "webpack": "^1.12.2"
   }

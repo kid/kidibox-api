@@ -3,9 +3,9 @@ import TorrentService from './TorrentService';
 import TorrentRepository from './TorrentRepository';
 
 export function register(router) {
-  const service = new TorrentService();
   const repository = new TorrentRepository();
-  const controller = new TorrentController(service, repository);
+  const service = new TorrentService();
+  const controller = new TorrentController(repository, service);
 
   /* eslint-disable func-names */
   router.get('/torrents', async function() { await controller.list(this); });
