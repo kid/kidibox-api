@@ -1,10 +1,14 @@
 import Router from 'koa-router';
+import { authenticate } from './auth';
 import * as torrents from './torrents';
 import * as users from './users';
 
-const router = new Router();
+export default function register(app) {
+  const router = new Router();
 
-torrents.register(router);
-users.register(router);
+  users.register(router);
+  torrents.register(router, authenticate);
 
-export default router;
+  app.use(router.middleware());
+}
+

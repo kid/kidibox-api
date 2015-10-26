@@ -7,10 +7,16 @@ const options = {
   adience: 'localhost:3000',
 };
 
-passport.use(new JwtStrategy(options, function verify(payload, done) {
-  if (payload.id) {
-    done(null, { id: payload.sub });
-  } else {
-    done(null, false);
-  }
-}));
+export default function register(app) {
+  app.use(passport.initialize());
+
+  passport.use(new JwtStrategy(options, function verify(payload, done) {
+    if (payload.sub) {
+      done(null, { id: payload.sub });
+    } else {
+      done(null, false);
+    }
+  }));
+}
+
+export const authenticate = passport.authenticate('jwt', { session: false });

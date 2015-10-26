@@ -17,7 +17,9 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'server.js',
+    sourceMapFilename: 'server.js.map',
   },
+  devtool: '#source-map',
   externals: nodeModules,
   plugins: [
     new webpack.BannerPlugin('require("source-map-support").install();', {
