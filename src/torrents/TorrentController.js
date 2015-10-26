@@ -11,6 +11,7 @@ export default class TorrentController {
   }
 
   async list(ctx) {
+    console.log(ctx.state);
     try {
       const torrents = this.torrentRepository.getAll();
       const stats = await this.torrentService.loadTorrentsStats();
@@ -28,7 +29,7 @@ export default class TorrentController {
     try {
       if (ctx.request.body.link) {
         const created = await this.torrentService.addUrl(ctx.request.body.link);
-        ctx.body = await this.torrentRepository.create(1, created.hashString, created.name);
+        ctx.body = await this.torrentRepository.create(ctx.state.user.sub, created.hashString, created.name);
       } else {
         ctx.status = 400;
       }

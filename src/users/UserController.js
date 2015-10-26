@@ -1,9 +1,10 @@
+import jwt from 'koa-jwt';
 import Promise from 'bluebird';
+import { options as jwtOptions } from '../auth';
 import UserService from './UserService';
 import UserRepository from './UserRepository';
 
 const Joi = Promise.promisifyAll(require('joi'));
-const jwt = Promise.promisifyAll(require('jsonwebtoken'));
 
 const registerSchema = Joi.object().keys({
   username: Joi.string().trim().empty().min(2).max(64).required(),
@@ -14,12 +15,6 @@ const authenticateSchema = Joi.object().keys({
   username: Joi.string().trim().empty().required(),
   password: Joi.string().trim().empty().required(),
 });
-
-const jwtOptions = {
-  expiresIn: '7d',
-  audience: 'localhost:3000',
-  issuer: 'localhost:3000',
-};
 
 function formatValidationError(error) {
   const messages = error.details.map(msg => {
@@ -68,11 +63,11 @@ export default class TorrentController {
 
       if (user && await this.userService.verifyPassword(user, validated.password)) {
         const options = {
-          subject: user.id,
           ...jwtOptions,
+          subject: user.id,
         };
 
-        ctx.body = { token: jwt.sign({}, 'secret', options) };
+        ctx.body = { token: jwt.sign({ }, 'secret', options) };
       } else {
         ctx.status = 401;
         ctx.body = { message: 'Invalid username or password' };
