@@ -2,10 +2,10 @@ const webpack = require('webpack');
 const path = require('path');
 const fs = require('fs');
 
-var nodeModules = {};
+const nodeModules = {};
 fs.readdirSync('node_modules')
-  .filter(x => {
-    return ['.bin'].indexOf(x) === -1;
+  .filter(mod => {
+    return ['.bin'].indexOf(mod) === -1;
   })
   .forEach(mod => {
     nodeModules[mod] = 'commonjs ' + mod;
@@ -24,7 +24,7 @@ module.exports = {
   plugins: [
     new webpack.BannerPlugin('require("source-map-support").install();', {
       raw: true,
-      entryOnly: true
+      entryOnly: true,
     }),
   ],
   module: {
@@ -43,4 +43,4 @@ module.exports = {
       },
     ],
   },
-}
+};

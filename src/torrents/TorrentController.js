@@ -11,7 +11,6 @@ export default class TorrentController {
   }
 
   async list(ctx) {
-    console.log(ctx.state);
     try {
       const torrents = this.torrentRepository.getAll();
       const stats = await this.torrentService.loadTorrentsStats();
