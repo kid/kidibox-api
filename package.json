@@ -4,6 +4,7 @@
   "description": "kidiBox api service",
   "main": "dist/server.js",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "node dist/server.js",
     "start:watch": "supervisor -n -w dist/server.js dist/server.js",
     "build": "webpack",
