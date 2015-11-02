@@ -1,0 +1,18 @@
+web:
+  build: .
+  ports:
+   - "3000:3000"
+  links:
+   - postgres
+   - transmission
+postgres:
+  image: postgres
+  environment:
+  - POSTGRES_USER=kidibox
+  - POSTGRES_PASSWORD=kidibox
+  ports:
+  - "5432:5432"
+transmission:
+  image: dperson/transmission
+  ports:
+  - "9091:9091"

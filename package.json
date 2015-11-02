@@ -4,6 +4,7 @@
   "description": "kidiBox api service",
   "main": "dist/server.js",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "node dist/server.js",
     "start:watch": "supervisor -n -w dist/server.js dist/server.js",
     "build": "webpack",
@@ -11,7 +12,9 @@
     "dev": "concurrent --kill-others 'npm run build:watch -- --colors' 'npm run start:watch'",
     "test": "mocha --compilers js:babel/register -r ./test/test-helper.js --recursive",
     "test:watch": "npm run test -- --watch",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "db:up": "sardine up",
+    "db:down": "sardine down"
   },
   "author": "Arnaud Rebts <arnaud.rebts@gmail.com>",
   "license": "MIT",

@@ -1,9 +1,9 @@
 import Promise from 'bluebird';
-import Transmission from 'Transmission';
+import Transmission from 'transmission';
 
 const transmission = new Transmission({
-  host: '192.168.99.100',
-  port: 32769,
+  host: process.env.TRANSMISSION,
+  port: 9091,
   username: 'admin',
   password: 'admin',
 });
