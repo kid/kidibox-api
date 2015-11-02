@@ -21,8 +21,8 @@ router(app);
 
 
 const options = {
-  key: fs.readFileSync(process.env.SSL_CERTIFICATE_KEY || 'server.key'),
-  cert: fs.readFileSync(process.env.SSL_CERTIFICATE || 'server.crt'),
+  key: fs.readFileSync(process.env.SSL_CERTIFICATE_KEY || 'localhost.key'),
+  cert: fs.readFileSync(process.env.SSL_CERTIFICATE || 'localhost.crt'),
 };
 
 spdy.createServer(options, app.callback()).listen(process.env.PORT || 8080, () => {
