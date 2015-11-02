@@ -5,11 +5,14 @@ node_js:
   - "5"
 env:
   - CXX=g++-4.8
-  - NODE_ENV=test
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
-after_script: "npm install coveralls@2 && cat ./coverage/lcov.info | coveralls"
+script: "npm test:cov"
+after_script: "npm install -g codeclimate-test-reporter && cat ./coverage/lcov.info | codeclimate-test-reporter"
+addons:
+  code_climate:
+    repo_token: 4ecb38703994e3a0f6526aba77ba6ba920974f078457493489a7d6290796b05a

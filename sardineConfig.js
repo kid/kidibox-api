@@ -5,6 +5,6 @@ module.exports = {
     host: 'postgres',
     user: 'kidibox',
     password: 'kidibox',
-    database: 'kidibox'
-  }
+    database: 'kidibox',
+  },
 };
