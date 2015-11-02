@@ -1,3 +1,5 @@
+import fs from 'fs';
+import spdy from 'spdy';
 import koa from 'koa';
 import body from 'koa-body';
 import cors from 'kcors';
@@ -17,8 +19,14 @@ app.use(helmet());
 auth(app);
 router(app);
 
-app.listen(process.env.PORT || 3000, () => {
+
+const options = {
+  key: fs.readFileSync(process.env.SSL_CERTIFICATE_KEY || 'server.key'),
+  cert: fs.readFileSync(process.env.SSL_CERTIFICATE || 'server.crt'),
+};
+
+spdy.createServer(options, app.callback()).listen(process.env.PORT || 8080, () => {
   /* eslint-disable no-console */
-  console.log('listening');
+  console.log(`listening on port ${process.env.PORT || 8080}`);
   /* eslint-enable no-console */
 });
