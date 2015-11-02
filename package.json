@@ -19,8 +19,8 @@
   "author": "Arnaud Rebts <arnaud.rebts@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "bluebird": "^2.10.2",
-    "joi": "^6.9.1",
+    "bluebird": "^3.0.5",
+    "joi": "^7.0.0",
     "jsonwebtoken": "^5.4.0",
     "kcors": "^1.0.1",
     "koa": "^1.1.0",
