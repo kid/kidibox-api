@@ -11,7 +11,7 @@ ENV DATABASE_URL postgres://kidibox:postgres:5432/kidibox
 COPY . /app/
 RUN cd /app; npm run build
 
-EXPOSE 3000
+EXPOSE 8080
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "/app/dist/server.js"]
