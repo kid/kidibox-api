@@ -10,4 +10,3 @@ export default function register (app) {
 
   app.use(router.middleware())
 }
-
