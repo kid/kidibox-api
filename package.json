@@ -13,7 +13,6 @@
     "test": "mocha --compilers js:babel/register -r ./test/test-helper.js --recursive",
     "test:watch": "npm run test -- --watch",
     "test:cov": "babel-node node_modules/isparta/bin/isparta cover --root src --include-all-sources --report html --report lcovonly _mocha -- -r ./test/test-helper.js --recursive",
-    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "lint": "eslint .",
     "db:up": "sardine up",
     "db:down": "sardine down"
@@ -46,7 +45,6 @@
     "chai": "^3.3.0",
     "chai-as-promised": "^5.1.0",
     "concurrently": "^0.1.1",
-    "coveralls": "^2.11.4",
     "eslint": "^1.7.1",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-loader": "^1.1.0",

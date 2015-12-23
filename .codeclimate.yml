@@ -7,4 +7,3 @@ engines:
 ratings:
   paths:
   - "**.js"
-  - "**.jsx"
