@@ -1,15 +1,15 @@
-import transmission from '../transmission';
+import transmission from '../transmission'
 
 export default class TorrentService {
-  async loadTorrentsStats() {
-    const data = await transmission.getAsync();
+  async loadTorrentsStats () {
+    const data = await transmission.getAsync()
     return data.torrents.reduce((acc, item) => {
-      acc[item.hashString] = item;
-      return acc;
-    }, {});
+      acc[item.hashString] = item
+      return acc
+    }, {})
   }
 
-  addUrl(url: string) {
-    return transmission.addUrlAsync(url);
+  addUrl (url: string) {
+    return transmission.addUrlAsync(url)
   }
 }

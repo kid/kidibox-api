@@ -14,6 +14,7 @@
     "test:watch": "npm run test -- --watch",
     "test:cov": "babel-node node_modules/isparta/bin/isparta cover --root src --include-all-sources --report html --report lcovonly _mocha -- -r ./test/test-helper.js --recursive",
     "lint": "eslint .",
+    "lint:fix": "npm run lint -- --fix",
     "db:up": "sardine up",
     "db:down": "sardine down"
   },
