@@ -1,12 +1,9 @@
-import Promise from 'bluebird'
-
 import Boom from 'boom'
 import Joi from 'joi'
+import Jwt from 'jsonwebtoken'
 
 import { userRepository } from '../users/UserRepository'
 import { userService } from '../users/UserService'
-
-const jwt = Promise.promisifyAll(require('jsonwebtoken'))
 
 const register = {
   method: 'POST',
@@ -55,7 +52,7 @@ const authenticate = {
     try {
       const user = await userRepository.findByName(request.payload.username)
       if (user && await userService.verifyPassword(user, request.payload.password)) {
-        const token = await jwt.sign({}, 'secret', { subject: user.id.toString() })
+        const token = await Jwt.sign({}, 'secret', { subject: user.id.toString() })
         reply({ token })
       } else {
         reply(Boom.unauthorized())
