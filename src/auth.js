@@ -1,16 +1,28 @@
-import jwt from 'koa-jwt'
+import jwt from 'hapi-auth-jwt2'
 
-export const options = {
-  secret: 'secret',
-  issuer: 'localhost:3000',
-  adience: 'localhost:3000'
+function validate (decoded, request, callback) {
+  return callback(null, true)
 }
 
-export default function register (app) {
-  app.use(jwt(options).unless({
-    path: [
-      /^\/authenticate/,
-      /^\/register/
-    ]
-  }))
+function register (server, options, next) {
+  server.register(jwt, (err) => {
+    if (err) {
+      throw err
+    }
+
+    server.auth.strategy('jwt', 'jwt', {
+      key: 'secret',
+      validateFunc: validate
+    })
+
+    server.auth.default('jwt')
+  })
+
+  next()
 }
+
+register.attributes = {
+  name: 'auth'
+}
+
+export default { register }
