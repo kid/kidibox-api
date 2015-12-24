@@ -14,3 +14,5 @@ export default class TorrentRepository {
     return database.one(query, [hashString, name, userId])
   }
 }
+
+export const torrentRepository = new TorrentRepository()

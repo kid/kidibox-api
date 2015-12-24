@@ -11,3 +11,5 @@ export default class UserService {
     return scrypt.verifyKdf(new Buffer(user.passwordHash, 'hex'), password)
   }
 }
+
+export const userService = new UserService()

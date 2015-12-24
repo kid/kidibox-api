@@ -1,10 +1,10 @@
 import database from '../database'
 
 export default class UserRepository {
-  create (user) {
+  create (name: string, passwordHash: string) {
     return database.one(
       'INSERT INTO users ("name", "passwordHash") VALUES ($1, $2) RETURNING id',
-      [user.name, user.passwordHash]
+      [name, passwordHash]
     )
   }
 
@@ -15,3 +15,5 @@ export default class UserRepository {
     )
   }
 }
+
+export const userRepository = new UserRepository()

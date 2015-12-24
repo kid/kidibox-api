@@ -1,29 +1,38 @@
 import fs from 'fs'
 import spdy from 'spdy'
-import koa from 'koa'
-import body from 'koa-body'
-import cors from 'kcors'
-import helmet from 'koa-helmet'
+import Hapi from 'hapi'
+
 import auth from './auth'
-import router from './router'
+import api from './api'
 
-const app = koa()
-
-app.experimental = true
-app.proxy = true
-
-app.use(body({ multipart: true }))
-app.use(cors())
-app.use(helmet())
-
-auth(app)
-router(app)
-
-const options = {
+const server = new Hapi.Server({ debug: { 'request': ['error', 'uncaught'] } })
+const serverOptions = {
   key: fs.readFileSync(process.env.SSL_CERTIFICATE_KEY || 'localhost.key'),
   cert: fs.readFileSync(process.env.SSL_CERTIFICATE || 'localhost.crt')
 }
 
-spdy.createServer(options, app.callback()).listen(process.env.PORT || 8080, () => {
-  console.log(`listening on port ${process.env.PORT || 8080}`)
+server.connection({
+  listener: spdy.createServer(serverOptions),
+  port: process.env.PORT || 8080,
+  tls: true
+})
+
+server.register(auth, (err) => {
+  if (err) {
+    throw err
+  }
+})
+
+server.register(api, { routes: { prefix: '/api' } }, (err) => {
+  if (err) {
+    throw err
+  }
+})
+
+server.start((err) => {
+  if (err) {
+    throw err
+  }
+
+  console.log('Server running at: ', server.info.uri)
 })
