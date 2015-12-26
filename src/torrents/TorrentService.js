@@ -9,6 +9,11 @@ export default class TorrentService {
     }, {})
   }
 
+  async loadTorrentStats (hashString: string) {
+    const data = await transmission.getAsync(hashString)
+    return data.torrents[0]
+  }
+
   addUrl (url: string) {
     return transmission.addUrlAsync(url)
   }
