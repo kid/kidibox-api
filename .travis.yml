@@ -23,6 +23,7 @@ install:
   - npm install -g coveralls
 
 script:
+  - npm run lint
   - npm run test:cov
 
 after_script:
