@@ -9,7 +9,7 @@ describe('UserService', () => {
       expect(service.hashPassword('foo')).to.eventually.be.a('string')
     })
 
-    it('should fail given invalid paraeter', () => {
+    it('should fail given invalid parameter', () => {
       expect(() => service.hashPassword()).to.throw()
       expect(() => service.hashPassword({})).to.throw()
       expect(() => service.hashPassword(null)).to.throw()
