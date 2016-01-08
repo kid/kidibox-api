@@ -13,7 +13,7 @@ const serverOptions = {
 
 server.connection({
   listener: spdy.createServer(serverOptions),
-  port: process.env.PORT || 8080,
+  port: process.env.PORT || 3000,
   tls: true
 })
 
