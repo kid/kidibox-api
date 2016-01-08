@@ -2,7 +2,7 @@
 
 set -e
 
-if [ "$1" = 'node' ]; then
+if [ "$1" = 'node' ] || [ "$1" = 'npm' ]; then
   npm run db:up
 fi
 

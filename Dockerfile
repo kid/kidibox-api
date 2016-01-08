@@ -1,17 +1,18 @@
 FROM node:latest
 
-WORKDIR /app
-
-COPY package.json /app/
-RUN npm install
-
 ENV NODE_ENV production
 ENV PORT 3000
 
 EXPOSE 3000
 
+COPY package.json /app/
+WORKDIR /app
+
+# scrypt has a build issue, we need to wait for 6.x
+RUN npm install scrypt
+RUN npm install
+
 COPY . /app/
-RUN cd /app; npm run build
 
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
-CMD ["node", "/app/dist/server.js"]
+CMD ["npm", "run", "start"]
