@@ -5,7 +5,10 @@ import Hapi from 'hapi'
 import auth from './auth'
 import api from './api'
 
-const server = new Hapi.Server({ debug: { 'request': ['error', 'uncaught'] } })
+const server = new Hapi.Server({
+  debug: { 'request': ['error', 'uncaught'] },
+  routes: { cors: true }
+})
 const serverOptions = {
   key: fs.readFileSync(process.env.SSL_CERTIFICATE_KEY || 'localhost.key'),
   cert: fs.readFileSync(process.env.SSL_CERTIFICATE || 'localhost.crt')
