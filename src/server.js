@@ -12,6 +12,7 @@ const serverOptions = {
 }
 
 server.connection({
+  routes: { cors: true },
   listener: spdy.createServer(serverOptions),
   port: process.env.PORT || 3000,
   tls: true
