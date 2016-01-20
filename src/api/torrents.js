@@ -1,4 +1,6 @@
 import Boom from 'boom'
+import Joi from 'joi'
+import path from 'path'
 
 import { torrentRepository } from '../torrents/TorrentRepository'
 import { torrentService } from '../torrents/TorrentService'
@@ -51,4 +53,31 @@ const create = {
   }
 }
 
-export default [list, create]
+const download = {
+  method: 'GET',
+  path: '/torrents/{torrentId}/{fileIndex?}',
+  config: {
+    validate: {
+      params: {
+        torrentId: Joi.number().required(),
+        fileIndex: Joi.number()
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    try {
+      const fileIndex = request.params.fileIndex || 0
+
+      const torrentModel = await torrentRepository.get(request.params.torrentId)
+      const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
+
+      const filePath = path.join(torrentStats.downloadDir, torrentStats.files[fileIndex].name)
+
+      reply.file(filePath, { mode: 'attachment', etagMethod: false })
+    } catch (ex) {
+      reply(ex)
+    }
+  }
+}
+
+export default [list, create, download]

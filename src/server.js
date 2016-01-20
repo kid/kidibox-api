@@ -1,6 +1,7 @@
 import fs from 'fs'
 import spdy from 'spdy'
 import Hapi from 'hapi'
+import Inert from 'inert'
 
 import auth from './auth'
 import api from './api'
@@ -16,6 +17,12 @@ server.connection({
   listener: spdy.createServer(serverOptions),
   port: process.env.PORT || 3000,
   tls: true
+})
+
+server.register(Inert, (err) => {
+  if (err) {
+    throw err
+  }
 })
 
 server.register(auth, (err) => {
