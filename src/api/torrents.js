@@ -10,11 +10,20 @@ const list = {
   path: '/torrents',
   handler: async (request, reply) => {
     try {
-      const torrentsModels = await torrentRepository.getAll()
-      const stats = await torrentService.loadTorrentsStats()
+      const [torrentsModels, torrentsStats] = await Promise.all([
+        torrentRepository.getAll(),
+        torrentService.loadTorrentsStats()
+      ])
 
       const torrents = torrentsModels.map((item) => {
-        item.stats = stats[item.hashString]
+        const stats = torrentsStats[item.hashString]
+        item.downloadedEver = stats.downloadedEver
+        item.uploadedEver = stats.uploadedEver
+        item.status = stats.status
+        item.totalSize = stats.totalSize
+        item.percentDone = stats.percentDone
+        item.rateDownload = stats.rateDownload
+        item.rateUpload = stats.rateUpload
         return item
       })
 
@@ -53,9 +62,39 @@ const create = {
   }
 }
 
+const get = {
+  method: 'GET',
+  path: '/torrents/{torrentId}',
+  config: {
+    validate: {
+      params: {
+        torrentId: Joi.number().required()
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    const torrentModel = await torrentRepository.get(request.params.torrentId)
+    const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
+
+    console.log(torrentStats)
+
+    torrentModel.downloadedEver = torrentStats.downloadedEver
+    torrentModel.uploadedEver = torrentStats.uploadedEver
+    torrentModel.status = torrentStats.status
+    torrentModel.totalSize = torrentStats.totalSize
+    torrentModel.bytesCompleted = torrentStats.bytesCompleted
+    torrentModel.percentDone = torrentStats.percentDone
+    torrentModel.rateDownload = torrentStats.rateDownload
+    torrentModel.rateUpload = torrentStats.rateUpload
+    torrentModel.files = torrentStats.files
+
+    reply(torrentModel)
+  }
+}
+
 const download = {
   method: 'GET',
-  path: '/torrents/{torrentId}/{fileIndex?}',
+  path: '/torrents/{torrentId}/download/{fileIndex?}',
   config: {
     validate: {
       params: {
@@ -71,13 +110,16 @@ const download = {
       const torrentModel = await torrentRepository.get(request.params.torrentId)
       const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
 
-      const filePath = path.join(torrentStats.downloadDir, torrentStats.files[fileIndex].name)
-
-      reply.file(filePath, { mode: 'attachment', etagMethod: false })
+      if (typeof torrentStats[fileIndex] !== 'undefined') {
+        const filePath = path.join(torrentStats.downloadDir, torrentStats.files[fileIndex].name)
+        reply.file(filePath, { mode: 'attachment', etagMethod: false })
+      } else {
+        reply(Boom.notFound())
+      }
     } catch (ex) {
       reply(ex)
     }
   }
 }
 
-export default [list, create, download]
+export default [list, create, get, download]
