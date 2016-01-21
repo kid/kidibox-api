@@ -27,7 +27,7 @@ export const download = {
         const { hashString, fileIndex } = decoded
         const torrentStats = await torrentService.loadTorrentStats(hashString)
 
-        if (typeof torrentStats.files[fileIndex] !== 'undefined') {
+        if (torrentStats && typeof torrentStats.files[fileIndex] !== 'undefined') {
           const filePath = path.join(torrentStats.downloadDir, torrentStats.files[fileIndex].name)
           console.log(filePath)
           reply.file(filePath, { mode: 'attachment', etagMethod: false })
