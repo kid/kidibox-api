@@ -79,8 +79,6 @@ const get = {
     const torrentModel = await torrentRepository.get(request.params.torrentId)
     const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
 
-    console.log(torrentStats)
-
     torrentModel.downloadedEver = torrentStats.downloadedEver
     torrentModel.uploadedEver = torrentStats.uploadedEver
     torrentModel.status = torrentStats.status
