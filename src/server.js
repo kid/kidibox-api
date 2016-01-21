@@ -31,7 +31,7 @@ server.register(auth, (err) => {
   }
 })
 
-server.register(api, { routes: { prefix: '/api' } }, (err) => {
+server.register(api, (err) => {
   if (err) {
     throw err
   }
