@@ -2,7 +2,8 @@ web:
   build: .
   environment:
     - DATABASE_URL=postgres://kidibox:kidibox@postgres:5432/kidibox
-    - TRANSMISSION=transmission
+    - TRANSMISSION_HOST=transmission
+    - TRANSMISSION_PORT=9091
   ports:
     - "3000:3000"
   links:
