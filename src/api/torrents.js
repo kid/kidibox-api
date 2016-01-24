@@ -40,20 +40,34 @@ const list = {
 const create = {
   method: 'POST',
   path: '/torrents',
+  config: {
+    payload: {
+      output: 'file',
+      allow: 'multipart/form-data'
+    }
+  },
   handler: async (request, reply) => {
     try {
-      if (request.payload && request.payload.link) {
-        const created = await torrentService.addUrl(request.payload.link)
-        const body = await torrentRepository.create(
-          request.auth.credentials.sub,
-          created.hashString,
-          created.name
-        )
-
-        reply(body)
-      } else {
-        reply(Boom.badRequest())
+      if (!request.payload) {
+        return reply(Boom.badRequest())
       }
+
+      let created
+      if (request.payload.file) {
+        created = await torrentService.addFile(request.payload.file.path)
+      } else if (request.payload.link) {
+        created = await torrentService.addUrl(request.payload.link)
+      } else {
+        return reply(Boom.badRequest())
+      }
+
+      const body = await torrentRepository.create(
+        request.auth.credentials.sub,
+        created.hashString,
+        created.name
+      )
+
+      reply(body)
     } catch (ex) {
       if (ex.code === '23505') {
         // Unque constraint violation, return 409 - Conflict
