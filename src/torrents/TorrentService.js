@@ -17,6 +17,10 @@ export default class TorrentService {
   addUrl (url: string) {
     return transmission.addUrlAsync(url)
   }
+
+  addFile (path: string) {
+    return transmission.addFileAsync(path)
+  }
 }
 
 export const torrentService = new TorrentService()
