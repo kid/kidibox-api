@@ -10,7 +10,7 @@ export default class TorrentRepository {
   }
 
   get (id: number) {
-    return database.one(
+    return database.oneOrNone(
       'SELECT t."id", t."name", t."hashString", t."createdAt", u.name as "userName"' +
       'FROM torrents t ' +
       'LEFT OUTER JOIN users u ON u."id" = t."userId" ' +

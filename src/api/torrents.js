@@ -76,20 +76,28 @@ const get = {
     }
   },
   handler: async (request, reply) => {
-    const torrentModel = await torrentRepository.get(request.params.torrentId)
-    const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
+    try {
+      const torrentModel = await torrentRepository.get(request.params.torrentId)
+      if (torrentModel) {
+        const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
 
-    torrentModel.downloadedEver = torrentStats.downloadedEver
-    torrentModel.uploadedEver = torrentStats.uploadedEver
-    torrentModel.status = torrentStats.status
-    torrentModel.totalSize = torrentStats.totalSize
-    torrentModel.bytesCompleted = torrentStats.bytesCompleted
-    torrentModel.percentDone = torrentStats.percentDone
-    torrentModel.rateDownload = torrentStats.rateDownload
-    torrentModel.rateUpload = torrentStats.rateUpload
-    torrentModel.files = torrentStats.files
+        torrentModel.downloadedEver = torrentStats.downloadedEver
+        torrentModel.uploadedEver = torrentStats.uploadedEver
+        torrentModel.status = torrentStats.status
+        torrentModel.totalSize = torrentStats.totalSize
+        torrentModel.bytesCompleted = torrentStats.bytesCompleted
+        torrentModel.percentDone = torrentStats.percentDone
+        torrentModel.rateDownload = torrentStats.rateDownload
+        torrentModel.rateUpload = torrentStats.rateUpload
+        torrentModel.files = torrentStats.files
 
-    reply(torrentModel)
+        reply(torrentModel)
+      } else {
+        reply(Boom.notFound())
+      }
+    } catch (ex) {
+      reply(ex)
+    }
   }
 }
 
