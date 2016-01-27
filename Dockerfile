@@ -9,6 +9,7 @@ COPY package.json /app/
 WORKDIR /app
 
 # scrypt has a build issue, we need to wait for 6.x
+RUN npm set progress=no
 RUN npm install scrypt
 RUN npm install
 
