@@ -37,9 +37,9 @@ const list = {
   }
 }
 
-const create = {
+const createFromFile = {
   method: 'POST',
-  path: '/torrents',
+  path: '/torrents/file',
   config: {
     payload: {
       output: 'file',
@@ -48,19 +48,38 @@ const create = {
   },
   handler: async (request, reply) => {
     try {
-      if (!request.payload) {
-        return reply(Boom.badRequest())
-      }
+      const created = await torrentService.addFile(request.payload.file.path)
+      const body = await torrentRepository.create(
+        request.auth.credentials.sub,
+        created.hashString,
+        created.name
+      )
 
-      let created
-      if (request.payload.file) {
-        created = await torrentService.addFile(request.payload.file.path)
-      } else if (request.payload.link) {
-        created = await torrentService.addUrl(request.payload.link)
+      reply(body)
+    } catch (ex) {
+      if (ex.code === '23505') {
+        // Unque constraint violation, return 409 - Conflict
+        reply(Boom.conflict('Torrent already exists'))
       } else {
-        return reply(Boom.badRequest())
+        reply(ex)
       }
+    }
+  }
+}
 
+const createFromLink = {
+  metod: 'POST',
+  path: '/torrents/link',
+  config: {
+    validate: {
+      payload: {
+        link: Joi.string().uri({ scheme: 'magnet' }).required()
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    try {
+      const created = await torrentService.addUrl(request.payload.link)
       const body = await torrentRepository.create(
         request.auth.credentials.sub,
         created.hashString,
@@ -145,4 +164,4 @@ const getToken = {
   }
 }
 
-export default [list, create, get, getToken]
+export default [list, createFromFile, createFromLink, get, getToken]
