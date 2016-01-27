@@ -20,6 +20,7 @@ const list = {
 
       const torrents = torrentsModels.map((item) => {
         const stats = torrentsStats[item.hashString]
+        item.name = stats.name
         item.downloadedEver = stats.downloadedEver
         item.uploadedEver = stats.uploadedEver
         item.status = stats.status
@@ -68,12 +69,12 @@ const createFromFile = {
 }
 
 const createFromLink = {
-  metod: 'POST',
+  method: 'POST',
   path: '/torrents/link',
   config: {
     validate: {
       payload: {
-        link: Joi.string().uri({ scheme: 'magnet' }).required()
+        link: Joi.string().required()
       }
     }
   },
@@ -114,6 +115,7 @@ const get = {
       if (torrentModel) {
         const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
 
+        torrentModel.name = torrentStats.name
         torrentModel.downloadedEver = torrentStats.downloadedEver
         torrentModel.uploadedEver = torrentStats.uploadedEver
         torrentModel.status = torrentStats.status
