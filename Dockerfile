@@ -8,8 +8,9 @@ EXPOSE 3000
 COPY package.json /app/
 WORKDIR /app
 
+# improve npm install speed
+RUN npm set progress=false
 # scrypt has a build issue, we need to wait for 6.x
-RUN npm set progress=no
 RUN npm install scrypt
 RUN npm install
 
