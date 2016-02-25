@@ -43,8 +43,9 @@ const createFromFile = {
   path: '/torrents/file',
   config: {
     payload: {
-      output: 'file',
-      allow: 'multipart/form-data'
+      allow: 'multipart/form-data',
+      maxBytes: 2097152, // 2MB
+      output: 'file'
     }
   },
   handler: async (request, reply) => {
