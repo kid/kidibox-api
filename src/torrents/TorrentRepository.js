@@ -23,6 +23,13 @@ export default class TorrentRepository {
     const query = 'INSERT INTO torrents ("hashString", "name", "userId") VALUES ($1, $2, $3) RETURNING id'
     return database.one(query, [hashString, name, userId])
   }
+
+  remove (id: number) {
+    return database.oneOrNone(
+      'DELETE FROM torrents WHERE id = $1 RETURNING id',
+      [id]
+    )
+  }
 }
 
 export const torrentRepository = new TorrentRepository()

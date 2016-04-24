@@ -167,4 +167,26 @@ const getToken = {
   }
 }
 
-export default [list, createFromFile, createFromLink, get, getToken]
+const remove = {
+  method: 'DELETE',
+  path: '/torrents/{torrentId}',
+  config: {
+    validate: {
+      params: {
+        torrentId: Joi.number().required()
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    const torrentModel = await torrentRepository.get(request.params.torrentId)
+    if (torrentModel) {
+      await torrentService.remove(torrentModel.hashString)
+      await torrentRepository.remove(torrentModel.id)
+      reply()
+    } else {
+      reply(Boom.notFound())
+    }
+  }
+}
+
+export default [list, createFromFile, createFromLink, get, getToken, remove]

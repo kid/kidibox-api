@@ -21,6 +21,10 @@ export default class TorrentService {
   addFile (path: string) {
     return transmission.addFileAsync(path)
   }
+
+  remove (hashString: string) {
+    return transmission.removeAsync([hashString], true)
+  }
 }
 
 export const torrentService = new TorrentService()
