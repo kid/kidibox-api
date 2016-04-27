@@ -33,7 +33,7 @@
     "jsonwebtoken": "^5.4.1",
     "pg-promise": "^2.8.5",
     "sardine": "^0.5.4",
-    "scrypt": "^5.4.1",
+    "scrypt": "^6.0.2",
     "spdy": "^3.0.0",
     "transmission": "^0.4.3",
     "wait-for-postgres": "^1.3.0"

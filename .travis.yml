@@ -14,7 +14,6 @@ addons:
       - g++-4.8
 
 install:
-  - npm install scrypt
   - npm install
   - npm install -g codeclimate-test-reporter
   - npm install -g coveralls
