@@ -30,7 +30,7 @@
     "hapi-auth-jwt2": "^5.3.0",
     "inert": "^3.2.0",
     "joi": "^8.0.5",
-    "jsonwebtoken": "^5.4.1",
+    "jsonwebtoken": "^6.1.0",
     "pg-promise": "^4.0.3",
     "sardine": "^0.6.4",
     "scrypt": "^6.0.2",
