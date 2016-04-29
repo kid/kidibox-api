@@ -53,7 +53,7 @@ const authenticate = {
     try {
       const user = await userRepository.findByName(request.payload.username)
       if (user && await userService.verifyPassword(user, request.payload.password)) {
-        const token = await jwt.sign({}, 'secret', { subject: user.id })
+        const token = await jwt.sign({}, 'secret', { subject: user.id.toString() })
         reply({ token })
       } else {
         reply(Boom.unauthorized())
