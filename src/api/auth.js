@@ -25,7 +25,9 @@ const register = {
       const name = request.payload.username
       const hash = await userService.hashPassword(request.payload.password)
 
-      reply(await userRepository.create(name, hash))
+      await userRepository.create(name, hash)
+
+      return reply().code(204)
     } catch (ex) {
       if (ex.code === '23505') {
         // Unque constraint violation, return 409 - Conflict

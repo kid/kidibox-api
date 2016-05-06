@@ -19,28 +19,11 @@ server.connection({
   tls: true
 })
 
-server.register(Inert, (err) => {
-  if (err) {
-    throw err
-  }
-})
-
-server.register(auth, (err) => {
-  if (err) {
-    throw err
-  }
-})
-
-server.register(api, (err) => {
-  if (err) {
-    throw err
-  }
-})
-
-server.start((err) => {
-  if (err) {
-    throw err
-  }
-
-  console.log('Server running at: ', server.info.uri)
-})
+server
+  .register([Inert, auth, api])
+  .then(() => server.start())
+  .then(() => console.log(`Server running at: ${server.info.uri}`))
+  .catch((error) => {
+    console.error(error.stack)
+    process.exit(1)
+  })
