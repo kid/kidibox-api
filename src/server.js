@@ -19,10 +19,39 @@ server.connection({
   tls: true
 })
 
+const good = {
+  register: require('good'),
+  options: {
+    ops: {
+      interval: 1000
+    },
+    reporters: {
+      stdout: [
+        {
+          module: 'good-squeeze',
+          name: 'Squeeze',
+          args: [{ log: '*', response: '*' }]
+        },
+        { module: 'good-console' },
+        'stdout'
+      ],
+      stderr: [
+        {
+          module: 'good-squeeze',
+          name: 'Squeeze',
+          args: [{ error: '*' }]
+        },
+        { module: 'good-console' },
+        'stderr'
+      ]
+    }
+  }
+}
+
 server
-  .register([Inert, auth, api])
+  .register([good, Inert, auth, api])
   .then(() => server.start())
-  .then(() => console.log(`Server running at: ${server.info.uri}`))
+  .then(() => server.log('info', `Server running at: ${server.info.uri}`))
   .catch((error) => {
     console.error(error.stack)
     process.exit(1)
