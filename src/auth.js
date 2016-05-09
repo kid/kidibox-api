@@ -1,7 +1,12 @@
 import jwt from 'hapi-auth-jwt2'
 
 function validate (decoded, request, callback) {
-  return callback(null, true)
+  const userId = parseInt(decoded.sub)
+  if (isNaN(userId)) {
+    return callback(null, false)
+  } else {
+    return callback(null, true, { ...decoded, userId })
+  }
 }
 
 function register (server, options, next) {
