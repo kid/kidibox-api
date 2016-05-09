@@ -52,7 +52,7 @@ const createFromFile = {
     try {
       const created = await torrentService.addFile(request.payload.file.path)
       const body = await torrentRepository.create(
-        request.auth.credentials.sub,
+        request.auth.credentials.userId,
         created.hashString,
         created.name
       )
@@ -83,7 +83,7 @@ const createFromLink = {
     try {
       const created = await torrentService.addUrl(request.payload.link)
       const body = await torrentRepository.create(
-        request.auth.credentials.sub,
+        request.auth.credentials.userId,
         created.hashString,
         created.name
       )
