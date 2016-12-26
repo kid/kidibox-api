@@ -156,11 +156,35 @@ const getToken = {
       const torrentStats = await torrentService.loadTorrentStats(torrentModel.hashString)
 
       if (typeof torrentStats.files[fileIndex] !== 'undefined') {
-        const payload = { hashString: torrentModel.hashString, fileIndex }
+        const filePath = torrentStats.files[fileIndex].name
+        const payload = { hashString: torrentModel.hashString, filePath }
         reply({ token: await jwt.sign(payload, 'secret', { expiresIn: '24h' }) })
       } else {
         reply(Boom.notFound())
       }
+    } catch (ex) {
+      reply(ex)
+    }
+  }
+}
+
+const getTokenAllFiles = {
+  method: 'GET',
+  path: '/torrents/{torrentId}/token',
+  config: {
+    validate: {
+      params: {
+        torrentId: Joi.number().required()
+      }
+    }
+  },
+  handler: async (request, reply) => {
+    try {
+      const { torrentId } = request.params
+      const torrentModel = await torrentRepository.get(torrentId)
+      const payload = { hashString: torrentModel.hashString, filePath: '.' }
+
+      reply({ token: await jwt.sign(payload, 'secret', { expiresIn: '24h' }) })
     } catch (ex) {
       reply(ex)
     }
@@ -189,4 +213,4 @@ const remove = {
   }
 }
 
-export default [list, createFromFile, createFromLink, get, getToken, remove]
+export default [list, createFromFile, createFromLink, get, getToken, getTokenAllFiles, remove]
