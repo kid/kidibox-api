@@ -175,14 +175,18 @@ const getTokenAllFiles = {
     validate: {
       params: {
         torrentId: Joi.number().required()
+      },
+      query: {
+        path: Joi.string()
       }
     }
   },
   handler: async (request, reply) => {
     try {
       const { torrentId } = request.params
+      const { path } = request.query
       const torrentModel = await torrentRepository.get(torrentId)
-      const payload = { hashString: torrentModel.hashString, filePath: '.' }
+      const payload = { hashString: torrentModel.hashString, filePath: path || torrentModel.name }
 
       reply({ token: await jwt.sign(payload, 'secret', { expiresIn: '24h' }) })
     } catch (ex) {
